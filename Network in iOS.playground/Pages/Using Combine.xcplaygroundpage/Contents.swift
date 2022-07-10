@@ -36,7 +36,6 @@ final class NetworkService {
         let url = URL(string: "https://api.github.com/users/\(userName)")!
         let publisher = session
             .dataTaskPublisher(for: url)
-            // 서버에서 받은 response 확인
             .tryMap { result -> Data in
                 guard let httpResponse = result.response as? HTTPURLResponse,
                       (200..<300).contains(httpResponse.statusCode) else {
