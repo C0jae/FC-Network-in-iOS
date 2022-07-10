@@ -62,10 +62,6 @@ let subscription = networkService
         print("profile: \(profile)")
     }
 
-
-
-
-
 //: [Next](@next)
 
 
