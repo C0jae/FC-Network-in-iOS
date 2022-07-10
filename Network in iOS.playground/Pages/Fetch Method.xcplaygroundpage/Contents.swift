@@ -28,15 +28,18 @@ struct GithubProfile: Codable {
 
 final class NetworkService {
     
-    let session: URLSession
+//    let url = URL(string: "https://api.github.com/users/\(userName)")!
     
+    let session: URLSession
     init(configuration: URLSessionConfiguration) {
         session = URLSession(configuration: configuration)
     }
     
     func fetchProfile(userName: String, completion: @escaping (Result<GithubProfile, Error>) -> Void) {
         let url = URL(string: "https://api.github.com/users/\(userName)")!
+
         let task = session.dataTask(with: url) { data, response, error in
+            
             if let error = error {
                 completion(.failure(NetworkError.transportError(error)))
                 return
@@ -51,9 +54,10 @@ final class NetworkService {
             guard let data = data else {
                 completion(.failure(NetworkError.noData))
                 return
+                
             }
             
-            do  {
+            do {
                 let decoder = JSONDecoder()
                 let profile = try decoder.decode(GithubProfile.self, from: data)
                 completion(.success(profile))
@@ -65,23 +69,15 @@ final class NetworkService {
     }
 }
 
-// network 담당 NetworkService
-// NetworkService 이용한 네트워크 작업
-
-
 let networkService = NetworkService(configuration: .default)
 
 networkService.fetchProfile(userName: "cafielo") { result in
     switch result {
     case .success(let profile):
         print("Profile: \(profile)")
-    case .failure(let error):
+    case.failure(let error):
         print("Error: \(error)")
     }
 }
-
-
-
-
 
 //: [Next](@next)
